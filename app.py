@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify
 import pandas as pd
 from fuzzywuzzy import process
@@ -75,5 +76,5 @@ def find_relevant_courses(course_df, keywords):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    port = int(os.environ.get("PORT", 5000))  # Use environment variable PORT if available, else default to 5000
+    app.run(host="0.0.0.0", port=port, debug=True)
