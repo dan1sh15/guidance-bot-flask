@@ -6,7 +6,7 @@ GuidanceBot is an AI-powered career counseling and emotional support platform th
 - **Job Role Data**: Provides a list of job roles and their relevant projects and skills.
 - **Course Recommendations**: Recommends Coursera and Udemy courses based on the selected job role.
 - **Career Path Guidance**: Offers career progression steps for different job roles, including experience requirements and next career steps.
-- **CORS Support**: The app allows cross-origin requests to work with a frontend application.
+- **Required Projects and Skills**: Offers list of projects and skills required for the particular job role.
 
 ## Tech Stack
 - **Backend**: Flask
