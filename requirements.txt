@@ -1,5 +1,5 @@
-fastapi
-uvicorn
-pandas
-fuzzywuzzy
-python-Levenshtein
+fastapi>=0.109.0  # Latest stable version (update as needed)
+uvicorn[standard]>=0.29.0  # ASGI server for running FastAPI
+pandas>=2.1.0  # Data processing
+fuzzywuzzy>=0.18.0  # String matching
+python-Levenshtein>=0.12.2  # Required for fuzzywuzzy optimization
