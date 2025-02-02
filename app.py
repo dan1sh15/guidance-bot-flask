@@ -1,9 +1,11 @@
 import os
 from flask import Flask, jsonify
+from flask_cors import CORS  # Import CORS
 import pandas as pd
 from fuzzywuzzy import process
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # Load your datasets
 df = pd.read_csv('profiles_dataset.csv')
@@ -11,17 +13,15 @@ course_df = pd.read_csv('Coursera.csv')
 udemy_df = pd.read_csv('Udemy.csv')
 career_df = pd.read_csv('career_paths.csv')
 
-# Job role keywords mapping (same as before)
+# Job role keywords mapping
 job_role_keywords = {
     # Define your job role and keyword mappings here...
 }
-
 
 @app.route("/job-roles", methods=["GET"])
 def get_job_roles():
     unique_roles = df["Job Role"].dropna().unique()
     return jsonify({"job_roles": unique_roles.tolist()})
-
 
 @app.route("/projects-and-skills/<job_role>", methods=["GET"])
 def get_projects_and_skills(job_role):
@@ -36,7 +36,6 @@ def get_projects_and_skills(job_role):
 
     return jsonify({"projects": projects, "skills": sorted(all_skills)})
 
-
 @app.route("/recommended-courses/<job_role>", methods=["GET"])
 def get_recommended_courses(job_role):
     keywords = job_role_keywords.get(job_role, [])
@@ -45,7 +44,6 @@ def get_recommended_courses(job_role):
     result = filtered_courses[["course", "partner", "skills", "duration", "crediteligibility", "rating"]].to_dict(
         orient="records")
     return jsonify(result)
-
 
 @app.route("/recommended-udemy-courses/<job_role>", methods=["GET"])
 def get_recommended_udemy_courses(job_role):
@@ -58,13 +56,11 @@ def get_recommended_udemy_courses(job_role):
     result = matched_courses[["title", "description", "instructor", "duration"]].to_dict(orient="records")
     return jsonify(result)
 
-
 @app.route("/career-path/<job_role>", methods=["GET"])
 def get_career_path(job_role):
     career_progression = career_df[career_df["job role"].str.contains(job_role, case=False, na=False, regex=True)]
     result = career_progression[["job role", "experience", "next career step"]].to_dict(orient="records")
     return jsonify(result)
-
 
 def find_relevant_courses(course_df, keywords):
     matched_courses = []
@@ -74,7 +70,6 @@ def find_relevant_courses(course_df, keywords):
             matched_courses.append(course)
     return matched_courses
 
-
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Use environment variable PORT if available, else default to 5000
+    port = int(os.environ.get("PORT", 5000))  # Use PORT from env, default to 5000
     app.run(host="0.0.0.0", port=port, debug=True)
